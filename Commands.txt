@@ -1,0 +1,84 @@
+>>> from Base.models import *
+
+1.
+>>> user_one = User.objects.create_user('Artem333')
+>>> user_two = User.objects.create_user('Oleg123')
+
+2.
+>>> author_one = Author.objects.create(user=user_one)
+>>> author_two = Author.objects.create(user=user_two)
+
+3.
+>>> sp = Category.objects.create(name="sports")
+>>> en = Category.objects.create(name="entertainment")
+>>> sc = Category.objects.create(name="Science")
+>>> bs = Category.objects.create(name="Business")
+
+
+4.
+>>> news_one = Post.objects.create(author=author_one, post_type="N", title="Championship", text="Liverpool have still not agreed new contracts with Mo Salah, Vi
+rgil van Dijk and Trent Alexander-Arnold; Reds trio are set to be out of contract in the summer; talks remain ongoing between Liverpool and the representatives of the players over new contracts")
+>>> article_one = Post.objects.create(author=author_one, post_type="A", title="A squid-inspired medical device could reduce the need for needles", text="If you’
+re one of the many adults who hate needles, you may be in luck. Scientists have taken inspiration from squids’ high pressure liquid jets and developed a needle-free device to inject medicine into organs deep within the body.")
+>>> article_two = Post.objects.create(author=author_two, post_type="A", title="'Kohaku' still matters for J-pop bragging rights", text="For nearly its entire existence, national broadcaster NHK’s New Year's Eve spectacle “Kohaku Uta Gassen” has served as an overview of the preceding 12 months in Japanese pop. Since its inception in 1953, many households have gathered around the TV to catch up on the country’s biggest hits over roughly four hours of performances before ringing in a new year.")
+
+5.
+>>> news_one.category.add(sp)
+>>> news_one.category.add(en)
+>>> article_one.category.add(sc)
+>>> article_one.category.add(en)
+>>> article_two.category.add(en)
+>>> article_two.category.add(bs)
+
+6.
+>>> com_one = Comment.objects.create(post=news_one, user=user_one, text="Good news")
+>>> com_two = Comment.objects.create(post=news_one, user=user_two, text="Ehhhh?!")
+>>> com_three = Comment.objects.create(post=article_one, user=user_one, text="Wow")
+>>> com_four = Comment.objects.create(post=article_two, user=user_two, text="Well yes, but actually no")
+
+7.
+>>> news_one.like()
+>>> news_one.like()
+>>> news_one.like()
+>>> news_one.like()
+>>> news_one.like()
+>>> article_one.dislike()
+>>> article_two.like()
+>>> article_two.like()
+>>> article_two.like()
+>>> com_one.like()
+>>> com_two.like()
+>>> com_two.like()
+>>> com_three.like()
+>>> com_three.like()
+>>> com_three.like()
+>>> com_four.dislike()
+>>> com_four.dislike()
+
+8.
+>>> author_one.update_rating()
+>>> author_two.update_rating()
+
+9.
+>>> best = Author.objects.order_by("-rating").first()
+>>> best
+<Author: Author object (1)>
+>>> best.rating
+22
+>>> best.user.username
+'Artem333'
+
+10.
+>>> Post.objects.order_by("-rating").values("created_time", "author__user__username", "rating", "title").first()
+
+{'created_time': datetime.datetime(2024, 12, 9, 17, 3, 44, 457331, tzinfo=datetime.timezone.utc), 'author__user__username': 'Artem333', 'rating': 5, 'title': 'Championship'}
+
+
+>>> Post.objects.order_by("-rating").first().preview()
+
+'Liverpool have still not agreed new contracts with Mo Salah, Virgil van Dijk and Trent Alexander-Arnold; Reds trio are set t...'
+
+11.
+>>> Post.objects.order_by("-rating").values("created_time", "author__user__username", "rating", "text").first()
+
+{'created_time': datetime.datetime(2024, 12, 9, 17, 3, 44, 457331, tzinfo=datetime.timezone.utc), 'author__user__username': 'Artem333', 'rating': 5, 'text': 'Liverpool have still not agreed new contracts with Mo Salah, Virgil van Dijk and Trent Alexander-Arnold; Reds trio are set to be out of contract in the summer; talks remain ongoing between Liverpool and the representatives of the players over new contracts'}
