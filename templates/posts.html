@@ -1,0 +1,27 @@
+{% extends 'default.html' %}
+
+{% block title %} All posts {% endblock title %}
+
+{% block content %}
+<h2>Posts list:</h2>
+{% if posts %}
+    <h6>Number of posts: {{ posts|length }}</h6>
+    <hr>
+    <table>
+        <tr>
+            <td>Title</td>
+            <td>Publication date</td>
+            <td>Preview</td>
+        </tr>
+        {% for i in posts %}
+            <tr>
+                <td>{{ i.title }}</td>
+                <td>{{ i.created_time|date:'d M Y' }}</td>
+                <td>{{ i.text|truncatewords:20 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No posts</p>
+{% endif %}
+{% endblock content %}

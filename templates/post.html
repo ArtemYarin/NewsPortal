@@ -1,0 +1,23 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block title %} {{post.title}} {% endblock title %}
+
+{% block content %}
+<h2>{{ post.title|censor }}</h2>
+<hr>
+
+Categories: 
+{% for i in post.category.all %}
+    {{ i.name }}
+{% endfor %}
+<p>Text</p>
+<p>{{ post.text|censor }}</p>
+<br>
+<p>Author: {{ post.author.user.username }}</p>
+<p>Rating: {{ post.rating }}</p>
+<p>Created time: {{ post.created_time|date:'d M Y' }}</p>
+<p>Post type: {{ post.get_post_type_display }}</p>
+
+{% endblock content %}

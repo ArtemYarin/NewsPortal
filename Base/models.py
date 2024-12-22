@@ -16,10 +16,15 @@ class Author(models.Model):
                 likes += y['rating']
         self.rating = likes
         self.save()
+    
+    def __str__(self):
+        return self.user.title() #Check
 
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    def __str__(self):
+        return self.name.title()
 
 
 class Post(models.Model):
@@ -50,10 +55,16 @@ class Post(models.Model):
         self.rating -= 1
         self.save()
 
+    def __str__(self):
+        return self.title.title()
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.post.title.title()} - {self.category.name.title()}"
 
 
 class Comment(models.Model):
@@ -70,3 +81,6 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    def __str__(self):
+        return self.text[30]
