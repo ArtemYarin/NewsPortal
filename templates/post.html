@@ -12,7 +12,7 @@ Categories:
 {% for i in post.category.all %}
     {{ i.name }}
 {% endfor %}
-<p>Text</p>
+<h6>Text</h6>
 <p>{{ post.text|censor }}</p>
 <br>
 <p>Author: {{ post.author.user.username }}</p>

@@ -18,7 +18,7 @@ class Author(models.Model):
         self.save()
     
     def __str__(self):
-        return self.user.title() #Check
+        return self.user.username.title()
 
 
 class Category(models.Model):
