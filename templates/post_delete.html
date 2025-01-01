@@ -1,0 +1,13 @@
+{% extends 'default.html' %}
+
+{% block title %} Post deleting {% endblock title %}
+
+{% block content %}
+    <h1>Deleting {{ object.get_post_type_display }}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete: {{object.title}}?</p>
+        {{ form.as_p }}
+        <input type="submit" value="Delete" />
+    </form>
+{% endblock content %}
