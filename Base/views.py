@@ -1,8 +1,30 @@
 from django.urls import reverse_lazy
 from .filters import PostFilter
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+    )
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.contrib.auth.models import Group
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    author_group = Group.objects.get(name='Author')
+    if not request.user.groups.filter(name='Author').exists():
+        author_group.user_set.add(user)
+    return redirect('/posts/user/')
+
+class UserPage(LoginRequiredMixin, TemplateView):
+    template_name = 'user_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_in_author'] = not self.request.user.groups.filter(name='Author').exists()
+        return context
 
 class PostList(ListView):
     model = Post
@@ -33,7 +55,9 @@ class PostListSearch(ListView):
         context['filterset'] = self.filterset
         return context
     
-class CreatePost(CreateView):
+class CreatePost(PermissionRequiredMixin, CreateView):
+    permission_required = ('Base.add_post',)
+
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
@@ -55,7 +79,9 @@ class CreatePost(CreateView):
             context['post_type'] = 'article'
         return context
 
-class UpdatePost(UpdateView):
+class UpdatePost(PermissionRequiredMixin, UpdateView):
+    permission_required = ('Base.change_post')
+
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
