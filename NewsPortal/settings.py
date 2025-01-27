@@ -107,11 +107,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# AllAuth
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# Gmail
+# Настройки для работы с SMTP сервером Gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Сервер SMTP
+EMAIL_PORT = 587  # Порт для подключения к SMTP серверу
+EMAIL_USE_TLS = True  # Использование шифрования TLS
+EMAIL_HOST_USER = 'ein3.14pi@gmail.com'  # Ваш адрес Gmail
+EMAIL_HOST_PASSWORD = 'xinh sdso dbcc sjfd'  # Пароль для приложений вашей учетной записи Gmail
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Адрес отправителя по умолчанию
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_ON_DAYS = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
