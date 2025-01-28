@@ -1,14 +1,16 @@
 from django.urls import reverse_lazy
-from .filters import PostFilter
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
     )
-from .models import Post
-from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
+
+from .filters import PostFilter
+from .models import Post
+from .forms import PostForm
+
 
 @login_required
 def upgrade_me(request):

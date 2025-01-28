@@ -88,3 +88,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text[30]
+    
+class Subscribers(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Base',
+    'Base.apps.BaseConfig',
     'allauth',
     'allauth.account',
     'django.contrib.sites',
@@ -107,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+ADMINS = [('artemyarin15', 'artemyarin15@gmail.com')]
+SERVER_EMAIL = 'ein3.14pi@gmail.com'
 
 # AllAuth
 ACCOUNT_EMAIL_REQUIRED = True
@@ -125,7 +127,6 @@ EMAIL_HOST_USER = 'ein3.14pi@gmail.com'  # Ваш адрес Gmail
 EMAIL_HOST_PASSWORD = 'xinh sdso dbcc sjfd'  # Пароль для приложений вашей учетной записи Gmail
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Адрес отправителя по умолчанию
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_ON_DAYS = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
