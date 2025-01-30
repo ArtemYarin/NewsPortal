@@ -1,30 +1,29 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
-from .models import Post, Subscribers
+from .models import Post, PostCategory, Subscribers
 
 
-@receiver(post_save, sender=Post)
-def notify_managers_news(sender, instance, created, **kwargs):
-    if created:
-        subject=instance.title
-    else:
-        subject=f'News {instance.title} has been changed'
+@receiver(m2m_changed, sender=PostCategory)
+def notify_managers_news(sender, instance, **kwargs):
+    if kwargs['action'] == 'post_add':
+        post_categories = instance.category.all()
+        subscribers_email = Subscribers.objects.filter(category__in=post_categories).values_list('user__email', flat=True)
 
-    """
-    post_category = instance.category
-    recipient = []
-    recipients = {}
-    for i in post_category:
-        recipient = i.Subscribers_set.all().user
-        for j in recipient:
-            recipients[j] = j.email
-    """
-            
-    send_mail(
-        subject=subject,
-        message=instance.text[:50],
-        from_email='ein3.14pi@gmail.com',
-        recipient_list=[()]
-    )
+        html_content = render_to_string(
+            'category_update.html',
+            {
+                'post': instance,
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f'New post: {instance.title}',
+            body='Nani',
+            from_email='ein3.14pi@gmail.com',
+            to=subscribers_email,
+        )
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()

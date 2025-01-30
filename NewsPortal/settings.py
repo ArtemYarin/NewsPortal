@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
+USE_TZ = False
+
+# Apscheduler
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

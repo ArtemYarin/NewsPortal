@@ -1,6 +1,10 @@
+from datetime import date
+
 from django import forms
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
+
 from .models import Post, Author
 
 class PostForm(forms.ModelForm):
@@ -16,6 +20,16 @@ class PostForm(forms.ModelForm):
             'author',
             'category',
         ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        author = cleaned_data.get("author")
+        today = date.today()
+        today_posts = Post.objects.filter(author=author, created_time__date=today).count()
+        if today_posts >= 3:
+            raise ValidationError('Post limit is reached')
+        return cleaned_data
+    
 
 class BasicSignupForm(SignupForm):
     def save(self, request):
