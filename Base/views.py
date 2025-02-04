@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -10,6 +12,7 @@ from django.contrib.auth.models import Group
 from .filters import PostFilter
 from .models import Post
 from .forms import PostForm
+from .tasks import hello
 
 
 @login_required
@@ -34,6 +37,10 @@ class PostList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 1
+
+    def get(self, request, *args, **kwargs):
+        hello.apply_async([], eta=datetime.now() + timedelta(seconds=10), expires=15)
+        return super().get(request, *args, **kwargs)
 
 class PostDetail(DetailView):
     model = Post
