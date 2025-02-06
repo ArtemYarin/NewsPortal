@@ -4,8 +4,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from .models import Post, PostCategory, Subscribers
+from .tasks import notify_news_creation
 
-
+"""
 @receiver(m2m_changed, sender=PostCategory)
 def notify_managers_news(sender, instance, **kwargs):
     if kwargs['action'] == 'post_add':
@@ -27,3 +28,10 @@ def notify_managers_news(sender, instance, **kwargs):
         )
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
+"""
+
+@receiver(m2m_changed, sender=PostCategory)
+def notify_news_creation_signal(sender, instance, **kwargs):
+    if kwargs['action'] == 'post_add':
+        post_pk = instance.pk
+        notify_news_creation.apply_async([post_pk])
